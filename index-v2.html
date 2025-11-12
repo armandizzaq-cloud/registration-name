@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Registration Entry</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 24px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .instructions {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #0066cc;
+            line-height: 1.5;
+        }
+        
+        .example {
+            background-color: #f9f9f9;
+            padding: 12px;
+            border-left: 3px solid #667eea;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            white-space: pre-line;
+            overflow-x: auto;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 16px;
+            background-color: white;
+            cursor: pointer;
+            transition: border-color 0.3s;
+            margin-bottom: 20px;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 40px;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 200px;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: scale(0.98);
+        }
+        
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        .response {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .response.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        
+        .response.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        
+        .response h3 {
+            margin-top: 0;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .response p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        
+        .checkmark {
+            font-size: 20px;
+            margin-right: 8px;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .month-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+            
+            .example {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Registration Entry</h1>
+        <p class="subtitle">Quick registration data submission</p>
+        
+        <div class="instructions">
+            <strong>📋 Instructions:</strong> Select the target month, then copy and paste the registration text from your Telegram notification. The system will automatically extract and add it to the correct Google Sheet tab.
+        </div>
+
+        <div class="example"><strong>Example format:</strong>
+Registration
+GA100 Wed 17 Dec (AM Physical)
+
+Tan Teng Teng
++65 9177-5510 / andreatan2509@gmail.com
+
+- SKILLSFUTURE: $643.50
+
+As of 11 Nov 2025 10:55 PM</div>
+        
+        <form id="registrationForm">
+            <label for="monthSelect">📅 Select Target Month:</label>
+            <select id="monthSelect" required>
+                <option value="Dec'25" selected>Dec'25 (Current)</option>
+                <option value="Jan'26">Jan'26</option>
+                <option value="Feb'26">Feb'26</option>
+                <option value="Mar'26">Mar'26</option>
+                <option value="Apr'26">Apr'26</option>
+                <option value="May'26">May'26</option>
+            </select>
+            
+            <label for="textInput">📄 Paste Registration Text:</label>
+            <textarea id="textInput" placeholder="Paste the registration text here..." required></textarea>
+            
+            <button type="submit" id="submitBtn">
+                Submit Registration
+            </button>
+        </form>
+        
+        <div class="response" id="response"></div>
+    </div>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const webhookUrl = 'https://n8n.heicodersacademy.com/webhook/registration-entry';
+            const textInput = document.getElementById('textInput').value.trim();
+            const monthSelect = document.getElementById('monthSelect').value;
+            const submitBtn = document.getElementById('submitBtn');
+            const responseDiv = document.getElementById('response');
+            
+            if (!textInput) {
+                alert('Please paste the registration text');
+                return;
+            }
+            
+            // Disable button and show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading"></span>Processing...';
+            responseDiv.style.display = 'none';
+            
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        text: textInput,
+                        sheet_name: monthSelect
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.text();
+                    
+                    // Try to parse the result to extract student info
+                    let studentName = '';
+                    let course = '';
+                    
+                    try {
+                        const jsonResult = JSON.parse(result);
+                        studentName = jsonResult['Student Name'] || '';
+                        course = jsonResult['Course'] || '';
+                    } catch (e) {
+                        // If not JSON, it might be plain text
+                        studentName = '';
+                    }
+                    
+                    // Show success message
+                    responseDiv.className = 'response success';
+                    responseDiv.style.display = 'block';
+                    
+                    if (studentName && course) {
+                        responseDiv.innerHTML = `
+                            <h3><span class="checkmark">✅</span>Success!</h3>
+                            <p><strong>Student:</strong> ${studentName}</p>
+                            <p><strong>Course:</strong> ${course}</p>
+                            <p><strong>Added to:</strong> ${monthSelect} sheet</p>
+                            <p style="margin-top: 10px; font-size: 13px;">Remember to fill in "Nature of Conversation" and "Called?" manually.</p>
+                        `;
+                    } else {
+                        responseDiv.innerHTML = `
+                            <h3><span class="checkmark">✅</span>Success!</h3>
+                            <p>Registration added to <strong>${monthSelect}</strong> sheet.</p>
+                            <p style="margin-top: 10px; font-size: 13px;">Remember to fill in "Nature of Conversation" and "Called?" manually.</p>
+                        `;
+                    }
+                    
+                    // Clear form
+                    document.getElementById('registrationForm').reset();
+                    // Reset to default month
+                    document.getElementById('monthSelect').value = 'Dec\'25';
+                    
+                    // Auto-hide success message after 5 seconds
+                    setTimeout(() => {
+                        responseDiv.style.display = 'none';
+                    }, 5000);
+                } else {
+                    throw new Error(`Server returned ${response.status}`);
+                }
+                
+            } catch (error) {
+                // Show error message
+                responseDiv.className = 'response error';
+                responseDiv.style.display = 'block';
+                responseDiv.innerHTML = `
+                    <h3>❌ Error</h3>
+                    <p>Failed to submit: ${error.message}</p>
+                    <p style="font-size: 13px; margin-top: 10px;">Check your connection and try again.</p>
+                `;
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Submit Registration';
+            }
+        });
+    </script>
+</body>
+</html>
