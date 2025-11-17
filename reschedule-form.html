@@ -197,7 +197,7 @@
         const errorMessage = document.getElementById('errorMessage');
 
         // Replace with your n8n webhook URL
-        const WEBHOOK_URL = 'YOUR_N8N_WEBHOOK_URL_HERE';
+        const WEBHOOK_URL = 'https://n8n.heicodersacademy.com/webhook/reschedule-request';
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -205,13 +205,12 @@
             const registrationText = document.getElementById('registrationText').value;
             const rescheduledDate = document.getElementById('rescheduledDate').value;
 
-            // Format the date to DD-MMM-YYYY
+            // Format the date to D MMM YYYY (e.g., 21 Nov 2025)
             const dateObj = new Date(rescheduledDate);
-            const formattedDate = dateObj.toLocaleDateString('en-GB', {
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric'
-            }).replace(/ /g, '-');
+            const day = dateObj.getDate();
+            const month = dateObj.toLocaleDateString('en-GB', { month: 'short' });
+            const year = dateObj.getFullYear();
+            const formattedDate = `${day} ${month} ${year}`;
 
             // Hide previous messages
             successMessage.style.display = 'none';
