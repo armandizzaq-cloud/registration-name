@@ -89,10 +89,56 @@
         .emoji {
             font-size: 1.2rem;
         }
+        .btn-back {
+            display: inline-block;
+            background: #6c757d;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 15px;
+            transition: background 0.3s;
+        }
+        .btn-back:hover {
+            background: #5a6268;
+        }
     </style>
 </head>
 <body>
+    <script>
+        // Password protection - check authentication
+        const SESSION_KEY = 'heicoders_auth';
+        
+        function isAuthenticated() {
+            let session = localStorage.getItem(SESSION_KEY);
+            if (!session) {
+                session = sessionStorage.getItem(SESSION_KEY);
+            }
+            
+            if (!session) {
+                return false;
+            }
+            
+            const sessionData = JSON.parse(session);
+            const now = new Date().getTime();
+            
+            if (now < sessionData.expiry) {
+                return true;
+            } else {
+                localStorage.removeItem(SESSION_KEY);
+                sessionStorage.removeItem(SESSION_KEY);
+                return false;
+            }
+        }
+        
+        // Check authentication on page load
+        if (!isAuthenticated()) {
+            window.location.href = 'login.html';
+        }
+    </script>
     <div class="form-container">
+        <a href="forms-menu.html" class="btn-back">← Back to Menu</a>
         <div class="form-header">
             <h1>📋 Student Cases</h1>
             <p>Submit student case follow-up information</p>
