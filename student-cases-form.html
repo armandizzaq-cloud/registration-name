@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Cases - Heicoders Academy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .form-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-header h1 {
+            color: #667eea;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .form-header p {
+            color: #6c757d;
+            font-size: 1rem;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .form-control, .form-select {
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            padding: 12px;
+            transition: all 0.3s;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            width: 100%;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        .alert {
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .required {
+            color: #dc3545;
+        }
+        textarea.form-control {
+            min-height: 180px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 5px;
+        }
+        .info-box p {
+            margin: 0;
+            color: #495057;
+            font-size: 0.95rem;
+        }
+        .emoji {
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <h1>📋 Student Cases</h1>
+            <p>Submit student case follow-up information</p>
+        </div>
+
+        <div class="info-box">
+            <p><span class="emoji">💡</span> Paste the student case message from Respond.io below. The system will automatically extract student details.</p>
+        </div>
+
+        <form id="studentCaseForm">
+            <!-- Case Text (Telegram Message) -->
+            <div class="mb-3">
+                <label for="caseText" class="form-label">Case Message <span class="required">*</span></label>
+                <textarea class="form-control" id="caseText" name="caseText" 
+                          placeholder="To Follow-up (GA100 24 Jan)
+Lee Meng Chung
++65 9773-8798
+
+- $643.50 SFC exceeds per-claim limit for 57yo" required></textarea>
+                <small class="text-muted">Copy and paste the entire message from Respond.io</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-submit">Submit Student Case</button>
+        </form>
+
+        <div id="responseMessage"></div>
+    </div>
+
+    <script>
+        document.getElementById('studentCaseForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitButton = this.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Submitting...';
+            
+            // Get form data
+            const formData = {
+                text: document.getElementById('caseText').value
+            };
+            
+            try {
+                // Replace with your actual n8n webhook URL
+                const webhookUrl = 'https://n8n.heicodersacademy.com/webhook/student-case';
+                
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const responseDiv = document.getElementById('responseMessage');
+                
+                if (response.ok) {
+                    responseDiv.innerHTML = `
+                        <div class="alert alert-success" role="alert">
+                            <strong>✓ Success!</strong> Student case submitted successfully.
+                        </div>
+                    `;
+                    this.reset();
+                } else {
+                    throw new Error('Submission failed');
+                }
+            } catch (error) {
+                document.getElementById('responseMessage').innerHTML = `
+                    <div class="alert alert-danger" role="alert">
+                        <strong>✗ Error!</strong> Failed to submit case. Please try again.
+                    </div>
+                `;
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
+            }
+        });
+    </script>
+</body>
+</html>
