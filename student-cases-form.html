@@ -99,7 +99,7 @@
         </div>
 
         <div class="info-box">
-            <p><span class="emoji">💡</span> Paste the student case message from Respond.io below. The system will automatically extract student details.</p>
+            <p><span class="emoji">💡</span> Paste the student case message from Telegram below. The system will automatically extract student details.</p>
         </div>
 
         <form id="studentCaseForm">
@@ -112,7 +112,7 @@ Lee Meng Chung
 +65 9773-8798
 
 - $643.50 SFC exceeds per-claim limit for 57yo" required></textarea>
-                <small class="text-muted">Copy and paste the entire message from Respond.io</small>
+                <small class="text-muted">Copy and paste the entire message from Telegram</small>
             </div>
 
             <button type="submit" class="btn btn-primary btn-submit">Submit Student Case</button>
@@ -136,7 +136,7 @@ Lee Meng Chung
             };
             
             try {
-                // Replace with your actual n8n webhook URL
+                // Production webhook URL
                 const webhookUrl = 'https://n8n.heicodersacademy.com/webhook/student-case';
                 
                 const response = await fetch(webhookUrl, {
