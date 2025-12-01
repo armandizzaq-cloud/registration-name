@@ -44,6 +44,16 @@
             font-size: 14px;
         }
 
+        .info-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #f5576c;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #856404;
+        }
+
         .form-group {
             margin-bottom: 25px;
         }
@@ -102,52 +112,54 @@
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        button:hover {
+        button:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(245, 87, 108, 0.4);
-        }
-
-        button:active {
-            transform: translateY(0);
+            box-shadow: 0 5px 20px rgba(245, 87, 108, 0.4);
         }
 
         button:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
+        }
+
+        .success-message, .error-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
         }
 
         .success-message {
-            background: #4caf50;
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            display: none;
-            text-align: center;
+            background-color: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
         }
 
         .error-message {
-            background: #f44336;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .btn-back {
+            display: inline-block;
+            background: #6c757d;
             color: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            display: none;
-            text-align: center;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 15px;
+            transition: background 0.3s;
         }
 
-        .info-box {
-            background: #fff3e0;
-            border-left: 4px solid #ff9800;
-            padding: 12px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            font-size: 13px;
-            color: #e65100;
+        .btn-back:hover {
+            background: #5a6268;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 480px) {
             .container {
                 padding: 30px 20px;
             }
@@ -159,12 +171,46 @@
     </style>
 </head>
 <body>
+    <script>
+        // Password protection - check authentication
+        const SESSION_KEY = 'heicoders_auth';
+        
+        function isAuthenticated() {
+            let session = localStorage.getItem(SESSION_KEY);
+            if (!session) {
+                session = sessionStorage.getItem(SESSION_KEY);
+            }
+            
+            if (!session) {
+                return false;
+            }
+            
+            const sessionData = JSON.parse(session);
+            const now = new Date().getTime();
+            
+            if (now < sessionData.expiry) {
+                return true;
+            } else {
+                localStorage.removeItem(SESSION_KEY);
+                sessionStorage.removeItem(SESSION_KEY);
+                return false;
+            }
+        }
+        
+        // Check authentication on page load
+        if (!isAuthenticated()) {
+            window.location.href = 'login.html';
+        }
+    </script>
+    
     <div class="container">
+        <a href="forms-menu.html" class="btn-back">← Back to Menu</a>
+        
         <h1>🚫 Withdrawal/Refund Request</h1>
         <p class="subtitle">Submit student withdrawal or refund information</p>
 
         <div class="info-box">
-            💡 Paste the registration text and select the request type
+            💡 Paste the registration text from Telegram and select the request type
         </div>
 
         <form id="withdrawalForm">
@@ -173,7 +219,7 @@
                 <textarea 
                     id="registrationText" 
                     name="registrationText" 
-                    placeholder="Paste the registration message here...&#10;&#10;Example:&#10;GA100 Sat 10 Jan (AM Physical)&#10;&#10;Song Yew Lee, Susan&#10;+65 8101-0618 / susansong220@yahoo.com&#10;&#10;- CASH: $143.50 (Link)&#10;- SKILLSFUTURE: $500"
+                    placeholder="Paste the registration message from Telegram here..."
                     rows="8"
                     required
                 ></textarea>
@@ -193,7 +239,7 @@
                 <textarea 
                     id="notes" 
                     name="notes" 
-                    placeholder="Enter any additional notes or details...&#10;&#10;Example:&#10;SkillsFuture: $936&#10;Cash: $336 paid + SkillsFuture: $600"
+                    placeholder="Enter any additional notes or details..."
                     rows="4"
                     required
                 ></textarea>
@@ -212,7 +258,6 @@
         const successMessage = document.getElementById('successMessage');
         const errorMessage = document.getElementById('errorMessage');
 
-        // Replace with your n8n webhook URL
         const WEBHOOK_URL = 'https://n8n.heicodersacademy.com/webhook/withdrawal-request';
 
         form.addEventListener('submit', async (e) => {
