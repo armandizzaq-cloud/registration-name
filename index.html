@@ -265,12 +265,12 @@
         <form id="registrationForm">
             <label for="monthSelect">📅 Select Target Month:</label>
             <select id="monthSelect" required>
-                <option value="Dec'25" selected>Dec'25 (Current)</option>
-                <option value="Jan'26">Jan'26</option>
-                <option value="Feb'26">Feb'26</option>
+                <option value="Feb'26" selected>Feb'26 (Current)</option>
                 <option value="Mar'26">Mar'26</option>
                 <option value="Apr'26">Apr'26</option>
                 <option value="May'26">May'26</option>
+                <option value="Jun'26">Jun'26</option>
+                <option value="Jul'26">Jul'26</option>
             </select>
             
             <label for="textInput">📄 Paste Registration Text:</label>
@@ -353,7 +353,7 @@
                     
                     // Clear form
                     document.getElementById('registrationForm').reset();
-                    document.getElementById('monthSelect').value = 'Dec\'25';
+                    document.getElementById('monthSelect').value = 'Feb\'26';
                     
                     // Auto-hide success message after 5 seconds
                     setTimeout(() => {
