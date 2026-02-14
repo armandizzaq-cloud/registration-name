@@ -207,6 +207,21 @@
         .btn-back:hover {
             background: #5a6268;
         }
+
+        .section-divider {
+            border: none;
+            border-top: 2px dashed #ddd;
+            margin: 25px 0 20px 0;
+        }
+
+        .section-label {
+            font-size: 13px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
         
         @media (max-width: 480px) {
             .container {
@@ -253,17 +268,17 @@
     </script>
     
     <div class="container">
-        <a href="forms-menu.html" class="btn-back">← Back to Menu</a>
+        <a href="forms-menu.html" class="btn-back">&larr; Back to Menu</a>
         
-        <h1>📝 Registration Entry</h1>
+        <h1>&#128221; Registration Entry</h1>
         <p class="subtitle">Quick registration data submission</p>
         
         <div class="instructions">
-            <strong>📋 Instructions:</strong> Select the target month, then copy and paste the registration text from your Telegram notification. The system will automatically extract and add it to the correct Google Sheet tab.
+            <strong>&#128203; Instructions:</strong> Select the target month, paste the registration text, then classify the conversation type and add notes. Everything will be submitted to the Google Sheet in one go.
         </div>
         
         <form id="registrationForm">
-            <label for="monthSelect">📅 Select Target Month:</label>
+            <label for="monthSelect">&#128197; Select Target Month:</label>
             <select id="monthSelect" required>
                 <option value="Feb'26" selected>Feb'26 (Current)</option>
                 <option value="Mar'26">Mar'26</option>
@@ -273,8 +288,34 @@
                 <option value="Jul'26">Jul'26</option>
             </select>
             
-            <label for="textInput">📄 Paste Registration Text:</label>
+            <label for="textInput">&#128196; Paste Registration Text:</label>
             <textarea id="textInput" placeholder="Paste the registration text from Telegram here..." required></textarea>
+
+            <hr class="section-divider">
+            <p class="section-label">Classification</p>
+            
+            <label for="natureSelect">&#128269; Nature of Conversation:</label>
+            <select id="natureSelect" required>
+                <option value="" disabled selected>-- Select --</option>
+                <option value="Sales">Sales</option>
+                <option value="Payment Enquiry">Payment Enquiry</option>
+            </select>
+
+            <label for="calledSelect">&#128222; Called?</label>
+            <select id="calledSelect" required>
+                <option value="No" selected>No</option>
+                <option value="Yes">Yes</option>
+            </select>
+
+            <label for="notesSelect">&#128221; Notes:</label>
+            <select id="notesSelect" required>
+                <option value="" disabled selected>-- Select --</option>
+                <option value="Facilitated end to end sales conversation">Facilitated end to end sales conversation</option>
+                <option value="Facilitated and reminded to complete payment after 1 follow up attempt">Facilitated and reminded to complete payment after 1 follow up attempt</option>
+                <option value="Facilitated reissuing of invoice and additional payment due to expiring credits">Facilitated reissuing of invoice and additional payment due to expiring credits</option>
+                <option value="Referral">Referral</option>
+                <option value="Facilitated reissuing of invoice and additional payment due to Mid-Career Credits">Facilitated reissuing of invoice and additional payment due to Mid-Career Credits</option>
+            </select>
             
             <button type="submit" id="submitBtn">
                 Submit Registration
@@ -291,11 +332,24 @@
             const webhookUrl = 'https://n8n.heicodersacademy.com/webhook/registration-entry';
             const textInput = document.getElementById('textInput').value.trim();
             const monthSelect = document.getElementById('monthSelect').value;
+            const natureSelect = document.getElementById('natureSelect').value;
+            const calledSelect = document.getElementById('calledSelect').value;
+            const notesSelect = document.getElementById('notesSelect').value;
             const submitBtn = document.getElementById('submitBtn');
             const responseDiv = document.getElementById('response');
             
             if (!textInput) {
                 alert('Please paste the registration text');
+                return;
+            }
+
+            if (!natureSelect) {
+                alert('Please select the Nature of Conversation');
+                return;
+            }
+
+            if (!notesSelect) {
+                alert('Please select a Note');
                 return;
             }
             
@@ -312,7 +366,10 @@
                     },
                     body: JSON.stringify({
                         text: textInput,
-                        sheet_name: monthSelect
+                        sheet_name: monthSelect,
+                        nature_of_conversation: natureSelect,
+                        called: calledSelect,
+                        notes: notesSelect
                     })
                 });
                 
@@ -337,23 +394,27 @@
                     
                     if (studentName && course) {
                         responseDiv.innerHTML = `
-                            <h3><span class="checkmark">✅</span>Success!</h3>
+                            <h3><span class="checkmark">&#10004;</span>Success!</h3>
                             <p><strong>Student:</strong> ${studentName}</p>
                             <p><strong>Course:</strong> ${course}</p>
                             <p><strong>Added to:</strong> ${monthSelect} sheet</p>
-                            <p style="margin-top: 10px; font-size: 13px;">Remember to fill in "Nature of Conversation" and "Called?" manually.</p>
+                            <p><strong>Nature:</strong> ${natureSelect}</p>
+                            <p><strong>Notes:</strong> ${notesSelect}</p>
                         `;
                     } else {
                         responseDiv.innerHTML = `
-                            <h3><span class="checkmark">✅</span>Success!</h3>
+                            <h3><span class="checkmark">&#10004;</span>Success!</h3>
                             <p>Registration added to <strong>${monthSelect}</strong> sheet.</p>
-                            <p style="margin-top: 10px; font-size: 13px;">Remember to fill in "Nature of Conversation" and "Called?" manually.</p>
+                            <p><strong>Nature:</strong> ${natureSelect}</p>
+                            <p><strong>Notes:</strong> ${notesSelect}</p>
                         `;
                     }
                     
-                    // Clear form
-                    document.getElementById('registrationForm').reset();
-                    document.getElementById('monthSelect').value = 'Feb\'26';
+                    // Clear form but keep month selection
+                    document.getElementById('textInput').value = '';
+                    document.getElementById('natureSelect').value = '';
+                    document.getElementById('calledSelect').value = 'No';
+                    document.getElementById('notesSelect').value = '';
                     
                     // Auto-hide success message after 5 seconds
                     setTimeout(() => {
@@ -368,7 +429,7 @@
                 responseDiv.className = 'response error';
                 responseDiv.style.display = 'block';
                 responseDiv.innerHTML = `
-                    <h3><span class="checkmark">❌</span>Error</h3>
+                    <h3><span class="checkmark">&#10060;</span>Error</h3>
                     <p>Failed to submit registration. Please try again or contact support.</p>
                 `;
             } finally {
