@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registration — Heicoders Academy</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f0f2f5;
+      --card-bg: #ffffff;
+      --header-start: #4f46e5;
+      --header-end: #7c3aed;
+      --accent: #4f46e5;
+      --label: #555;
+      --border: #dde1e7;
+      --input-bg: #f8f9fb;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+    }
+
+    .form-container {
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: #666;
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin-bottom: 1.25rem;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, var(--header-start), var(--header-end));
+      padding: 1.5rem 1.75rem;
+      color: #fff;
+    }
+    .card-header .brand { font-size: 0.8rem; opacity: 0.85; letter-spacing: 0.5px; text-transform: uppercase; }
+    .card-header h4 { margin: 0.3rem 0 0; font-weight: 700; font-size: 1.2rem; }
+
+    .card-body { padding: 1.75rem; }
+
+    .section-divider {
+      text-align: center;
+      font-size: 0.7rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #aaa;
+      margin: 1.5rem 0 1.25rem;
+      position: relative;
+    }
+    .section-divider::before, .section-divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 38%;
+      height: 1px;
+      background: #e4e6ea;
+    }
+    .section-divider::before { left: 0; }
+    .section-divider::after { right: 0; }
+
+    .form-label {
+      color: var(--label);
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-control, .form-select {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #222;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+      background: #fff;
+    }
+
+    textarea.form-control {
+      font-family: 'Courier New', 'Consolas', monospace;
+      font-size: 0.82rem;
+      line-height: 1.65;
+      min-height: 200px;
+    }
+
+    .info-box {
+      background: #eef2ff;
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 0.7rem 1rem;
+      font-size: 0.82rem;
+      color: #4338ca;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, var(--header-start), var(--header-end));
+      border: none;
+      border-radius: 9px;
+      padding: 0.8rem;
+      font-weight: 600;
+      width: 100%;
+      color: #fff;
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    .btn-submit:hover:not(:disabled) { opacity: 0.92; color: #fff; transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .alert { border-radius: 8px; font-size: 0.88rem; }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <a href="forms-menu.html" class="back-link">&#8592; Back to Forms</a>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="brand">Heicoders Academy</div>
+        <h4>&#x1F4DD; Registration Form</h4>
+      </div>
+
+      <div class="card-body">
+        <div class="info-box">
+          Select the target month, paste the registration text from Telegram, then classify the conversation and submit.
+        </div>
+
+        <div id="alertBox" class="alert d-none" role="alert"></div>
+
+        <form id="registrationForm" novalidate>
+
+          <!-- Target Month — dynamically generated, no fixed end -->
+          <div class="mb-3">
+            <label class="form-label">&#x1F4C5; Select Target Month <span class="text-danger">*</span></label>
+            <select class="form-select" id="targetMonth" required>
+              <!-- Options injected by JavaScript on page load -->
+            </select>
+          </div>
+
+          <!-- Registration Text -->
+          <div class="mb-3">
+            <label class="form-label">&#x1F4CB; Paste Registration Text <span class="text-danger">*</span></label>
+            <textarea class="form-control" id="registrationText" required
+              placeholder="Registration&#10;DM100 Wed 08 Apr (PM Online)&#10;&#10;Yu Lin Loh&#10;+65 9380-8806 / yulinloh@gmail.com&#10;&#10;- CASH: $163 (Link)&#10;- SKILLSFUTURE: $500&#10;&#10;As of 05 Apr 2026 08:31 AM"></textarea>
+          </div>
+
+          <div class="section-divider">Classification</div>
+
+          <!-- Nature of Conversation -->
+          <div class="mb-3">
+            <label class="form-label">&#x1F50D; Nature of Conversation <span class="text-danger">*</span></label>
+            <select class="form-select" id="natureOfConversation" required>
+              <option value="" disabled selected>-- Select --</option>
+              <option value="Sales">Sales</option>
+              <option value="Payment Enquiry">Payment Enquiry</option>
+            </select>
+          </div>
+
+          <!-- Called? -->
+          <div class="mb-3">
+            <label class="form-label">&#x1F4DE; Called?</label>
+            <select class="form-select" id="called">
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+
+          <!-- Notes -->
+          <div class="mb-4">
+            <label class="form-label">&#x1F4DD; Notes <span class="text-danger">*</span></label>
+            <select class="form-select" id="notes" required>
+              <option value="" disabled selected>-- Select --</option>
+              <option value="Facilitated end to end sales conversation">Facilitated end to end sales conversation</option>
+              <option value="Facilitated and reminded to complete payment after 1 follow up attempt">Facilitated and reminded to complete payment after 1 follow up attempt</option>
+              <option value="Facilitated reissuing of invoice and additional payment due to Mid-Career Credits">Facilitated reissuing of invoice and additional payment due to Mid-Career Credits</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-submit" id="submitBtn">
+            <span id="btnText">Submit Registration</span>
+            <span id="btnSpinner" class="d-none">
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              Submitting...
+            </span>
+          </button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ⚠️ PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE
+    const WEBHOOK_URL = 'https://script.google.com/a/macros/heicodersacademy.com/s/AKfycbw7tTWHQsaYwqkussKG78_IYyljk9vNHFNGUvhv1MOJrUfhs_0dIi2zLxfS590Bp0p5sg/exec';
+
+    // Dynamically generate months starting from current month, rolling 24 months ahead
+    (function buildMonthDropdown() {
+      const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const now    = new Date();
+      const sel    = document.getElementById('targetMonth');
+
+      // Add 24 future months starting from current month
+      for (let i = 0; i < 24; i++) {
+        const d     = new Date(now.getFullYear(), now.getMonth() + i, 1);
+        const label = MONTHS[d.getMonth()] + "'" + String(d.getFullYear()).slice(2);
+        const opt   = document.createElement('option');
+        opt.value       = label;
+        opt.textContent = label;
+        if (i === 0) opt.selected = true; // Default to current month
+        sel.appendChild(opt);
+      }
+    })();
+
+    document.getElementById('registrationForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const form           = this;
+      const submitBtn      = document.getElementById('submitBtn');
+      const btnText        = document.getElementById('btnText');
+      const btnSpinner     = document.getElementById('btnSpinner');
+      const alertBox       = document.getElementById('alertBox');
+
+      // Validate
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      // Loading state
+      submitBtn.disabled = true;
+      btnText.classList.add('d-none');
+      btnSpinner.classList.remove('d-none');
+      alertBox.classList.add('d-none');
+
+      const payload = {
+        formType:              'registration',
+        targetMonth:           document.getElementById('targetMonth').value,
+        registrationText:      document.getElementById('registrationText').value.trim(),
+        natureOfConversation:  document.getElementById('natureOfConversation').value,
+        called:                document.getElementById('called').value,
+        notes:                 document.getElementById('notes').value
+      };
+
+      try {
+        const response = await fetch(WEBHOOK_URL, {
+          method:   'POST',
+          redirect: 'follow',
+          headers:  { 'Content-Type': 'text/plain' }, // text/plain avoids CORS preflight with Apps Script
+          body:     JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          showAlert('success', result.message || '✅ Registration submitted successfully!');
+          form.reset();
+          // Re-select current month after reset (first option is always current month)
+          document.getElementById('targetMonth').selectedIndex = 0;
+        } else {
+          showAlert('danger', '❌ ' + (result.error || 'Submission failed. Please try again.'));
+        }
+
+      } catch (err) {
+        showAlert('danger', '❌ Network error. Please check your connection and try again.');
+        console.error(err);
+      } finally {
+        submitBtn.disabled = false;
+        btnText.classList.remove('d-none');
+        btnSpinner.classList.add('d-none');
+      }
+    });
+
+    function showAlert(type, message) {
+      const alertBox = document.getElementById('alertBox');
+      alertBox.className = 'alert alert-' + type;
+      alertBox.textContent = message;
+      alertBox.classList.remove('d-none');
+      alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  </script>
+</body>
+</html>

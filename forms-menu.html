@@ -1,183 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forms Menu - Heicoders Academy</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 40px 20px;
-        }
-        .menu-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        }
-        .menu-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        .menu-header h1 {
-            color: #667eea;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        .menu-header p {
-            color: #6c757d;
-            font-size: 1.1rem;
-        }
-        .form-card {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 20px;
-            transition: all 0.3s;
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
-        .form-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            border-color: #667eea;
-        }
-        .form-card h3 {
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 10px;
-            font-size: 1.3rem;
-        }
-        .form-card p {
-            color: #6c757d;
-            margin-bottom: 0;
-            font-size: 0.95rem;
-        }
-        .form-icon {
-            font-size: 2.5rem;
-            float: left;
-            margin-right: 20px;
-        }
-        .logout-btn {
-            background: #dc3545;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 600;
-            transition: all 0.3s;
-            float: right;
-        }
-        .logout-btn:hover {
-            background: #c82333;
-            transform: translateY(-2px);
-        }
-        .clearfix::after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forms — Heicoders Academy</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f0f2f5;
+      --card-bg: #ffffff;
+      --border: #dde1e7;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 2.5rem 1rem 4rem;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .page-header .brand {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #999;
+      margin-bottom: 0.4rem;
+    }
+    .page-header h2 {
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: #1a1a2e;
+      margin: 0;
+    }
+    .page-header p {
+      color: #888;
+      font-size: 0.88rem;
+      margin-top: 0.4rem;
+    }
+
+    .forms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem 1.4rem;
+      text-decoration: none;
+      display: block;
+      transition: box-shadow 0.2s, transform 0.15s;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .form-card:hover {
+      box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+
+    .form-card .icon {
+      font-size: 2rem;
+      margin-bottom: 0.7rem;
+      display: block;
+    }
+
+    .form-card .title {
+      font-weight: 700;
+      font-size: 0.97rem;
+      color: #1a1a2e;
+      margin-bottom: 0.3rem;
+    }
+
+    .form-card .desc {
+      font-size: 0.78rem;
+      color: #888;
+      line-height: 1.45;
+    }
+
+    .form-card .badge-pill {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 0.2rem 0.55rem;
+      border-radius: 20px;
+      margin-top: 0.6rem;
+    }
+
+    /* Card accent colours */
+    .card-registration { border-top: 3px solid #4f46e5; }
+    .card-registration .badge-pill { background: #eef2ff; color: #4338ca; }
+
+    .card-withdrawal { border-top: 3px solid #dc2626; }
+    .card-withdrawal .badge-pill { background: #fef2f2; color: #b91c1c; }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 2.5rem;
+      font-size: 0.78rem;
+      color: #bbb;
+    }
+  </style>
 </head>
 <body>
-    <div class="menu-container">
-        <div class="clearfix mb-4">
-            <button onclick="logout()" class="logout-btn">Logout</button>
-        </div>
-        
-        <div class="menu-header">
-            <h1>📋 Forms Menu</h1>
-            <p>Select a form to access</p>
-        </div>
 
-        <div class="row">
-            <div class="col-12">
-                <div class="form-card" onclick="openForm('index.html')">
-                    <div class="form-icon">📝</div>
-                    <h3>Registration Form</h3>
-                    <p>Register new students and extract data from Telegram messages</p>
-                </div>
-            </div>
+  <div class="page-header">
+    <div class="brand">Heicoders Academy</div>
+    <h2>&#x1F4CB; Internal Forms</h2>
+    <p>Select a form to get started</p>
+  </div>
 
-            <div class="col-12">
-                <div class="form-card" onclick="openForm('reschedule-form.html')">
-                    <div class="form-icon">📅</div>
-                    <h3>Rescheduling Form</h3>
-                    <p>Process student rescheduling requests with new intake dates</p>
-                </div>
-            </div>
+  <div class="forms-grid">
 
-            <div class="col-12">
-                <div class="form-card" onclick="openForm('withdrawal-form.html')">
-                    <div class="form-icon">💰</div>
-                    <h3>Withdrawal/Refund Form</h3>
-                    <p>Handle student withdrawal and refund requests</p>
-                </div>
-            </div>
+    <!-- Registration -->
+    <a href="registration-form.html" class="form-card card-registration">
+      <span class="icon">&#x1F4DD;</span>
+      <div class="title">Registration</div>
+      <div class="desc">Register new students from Telegram messages and populate the Course Advisory Tracker.</div>
+      <span class="badge-pill">Course Advisory Tracker</span>
+    </a>
 
-            <div class="col-12">
-                <div class="form-card" onclick="openForm('student-cases-form.html')">
-                    <div class="form-icon">📋</div>
-                    <h3>Student Cases Form</h3>
-                    <p>Submit student case follow-up information and track issues</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Withdrawal / Refund -->
+    <a href="withdrawal-form.html" class="form-card card-withdrawal">
+      <span class="icon">&#x1F504;</span>
+      <div class="title">Withdrawal / Refund</div>
+      <div class="desc">Submit withdrawal or refund requests. Student details are extracted automatically.</div>
+      <span class="badge-pill">Student Requests Log</span>
+    </a>
 
-    <script>
-        const SESSION_KEY = 'heicoders_auth';
+  </div>
 
-        // Check authentication on page load
-        window.addEventListener('DOMContentLoaded', function() {
-            if (!isAuthenticated()) {
-                // Not logged in, redirect to login page
-                window.location.href = 'login.html';
-            }
-        });
+  <div class="footer-note">
+    Powered by Google Apps Script &middot; Heicoders Academy &copy; 2026
+  </div>
 
-        function isAuthenticated() {
-            // Check localStorage first
-            let session = localStorage.getItem(SESSION_KEY);
-            if (!session) {
-                // Check sessionStorage
-                session = sessionStorage.getItem(SESSION_KEY);
-            }
-            
-            if (!session) {
-                return false;
-            }
-            
-            const sessionData = JSON.parse(session);
-            const now = new Date().getTime();
-            
-            // Check if session is still valid
-            if (now < sessionData.expiry) {
-                return true;
-            } else {
-                // Session expired, clear it
-                localStorage.removeItem(SESSION_KEY);
-                sessionStorage.removeItem(SESSION_KEY);
-                return false;
-            }
-        }
-
-        function openForm(formUrl) {
-            window.location.href = formUrl;
-        }
-
-        function logout() {
-            // Clear both localStorage and sessionStorage
-            localStorage.removeItem(SESSION_KEY);
-            sessionStorage.removeItem(SESSION_KEY);
-            
-            // Redirect to login page
-            window.location.href = 'login.html';
-        }
-    </script>
 </body>
 </html>
